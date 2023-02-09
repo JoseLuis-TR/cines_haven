@@ -1,0 +1,106 @@
+@use "../utilities/variables" as v
+
+.formBG
+  position: fixed
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  background-color: rgba(0, 0, 0, 0.2)
+  backdrop-filter: blur(2px)
+  display: flex
+  align-items: center
+  justify-content: center
+  font-family: v.$mulish-font
+
+
+.formContainer
+  width: 700px
+  height: fit-content
+  background-color: v.$form-color_medium
+  position: absolute
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 50px 0
+  border-radius: 60px
+  box-shadow: -20px 20px v.$detail-color
+  transition: all 0.3s ease-in
+
+  &__selectors
+    width: 70%
+    position: relative
+    background-color: v.$form-color_lighter
+    border-radius: 5px
+    display: flex
+    justify-content: space-around
+    padding: 10px 0
+
+    button
+      font-size: 2.5rem
+      font-weight: 600
+      padding: 10px 20px
+      background-color: transparent
+      border-radius: 5px
+      margin: 0 10px
+      cursor: pointer
+      border: none
+      transition: .5s
+
+    .btnActivated
+      font-weight: 700
+      color: white
+      background-color: v.$form-color_medium
+
+  &__body
+    width: 70%
+    &--text
+      text-align: center
+      font-size: 2.5rem
+      font-weight: 600
+      color: white
+      margin: 30px 0
+    &__form
+      display: flex
+      flex-direction: column
+
+      button
+        font-size: 3rem
+        font-weight: 700
+        color: white
+        width: fit-content
+        align-self: center
+        margin-top: 30px
+        border: none
+        border-radius: 5px
+        padding: 15px 20px
+        background-color: v.$form-color_darker
+        cursor: pointer
+        transition: all 0.7s
+
+      button:hover
+        transform: translateX(10px) translateY(-10px)
+        box-shadow: v.$detail-color -10px 10px
+
+      label
+        font-size: 2rem
+        margin-bottom: 5px
+        color: white
+
+      input
+        height: 40px
+        padding: 0 10px
+        font-size: 1.5rem
+        font-weight: 600
+        border: none
+        border-radius: 5px
+        background-color: v.$input-color
+        margin: 0 0 20px
+
+.formBackground-enter-active,
+.formBackground-leave-active
+  transition: all 0.25s ease
+
+.formBackground-enter-from,
+.formBackground-leave-to
+  opacity: 0
