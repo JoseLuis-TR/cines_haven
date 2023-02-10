@@ -6,12 +6,22 @@ import Index from './components/Index.vue'
 
 
 const routes = [
-    { path : '/', component:Index}
+    {
+        path : '/',
+        component:Index,
+        meta:{
+            title: "Haven - Inicio",
+        }
+    }
 ]
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+router.beforeEach((to, from) => {
+    document.title = to.meta?.title ?? 'Haven'
 })
 
 const app = createApp(App)

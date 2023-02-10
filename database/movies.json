@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "The Shawshank Redemption",
+    "director": "Frank Darabont",
+    "time": "142 min",
+    "poster_image": "https://i.etsystatic.com/16821137/r/il/c8b3e3/1879586236/il_570xN.1879586236_kdtm.jpg",
+    "screenshot": "https://screen-shot.co.uk/wp-content/uploads/2020/02/hwn4d-6A12XQP8T2V-Full-Image_GalleryBackground-en-US-1515800147091._SX1080_-e1582213326518.jpg",
+    "synopsis": "Lorem Ipsum"
+  },
+  {
+    "id": 2,
+    "title": "The Godfather",
+    "director": "Francis Ford Coppola",
+    "time": "175 min",
+    "poster_image": "https://media.posterlounge.com/images/big/1878326.jpg",
+    "screenshot": "https://i.pinimg.com/originals/d5/4d/86/d54d868ad678968d671ef8e287925c48.jpg",
+    "synopsis": "Dolor Sit"
+  },
+  {
+    "id": 3,
+    "title": "The Dark Knight",
+    "director": "Christopher Nolan",
+    "time": "152 min",
+    "poster_image": "https://static.posters.cz/image/750/posters/batman-dark-knight-joker-i13945.jpg",
+    "screenshot": "https://m.media-amazon.com/images/M/MV5BMTkyNTI0NDM5NF5BMl5BanBnXkFtZTcwMDkzMTk2Mw@@._V1_.jpg",
+    "synopsis": "Amet Consectetur"
+  },
+  {
+    "id": 4,
+    "title": "Pulp Fiction",
+    "director": "Quentin Tarantino",
+    "time": "154 min",
+    "poster_image": "https://static.posters.cz/image/1300/posters/pulp-fiction-cover-i1288.jpg",
+    "screenshot": "https://film-grab.com/wp-content/uploads/photo-gallery/22%20(847).jpg?bwg=1547379565",
+    "synopsis": "Adipiscing Elit"
+  },
+  {
+    "id": 5,
+    "title": "The Lord of the Rings: The Return of the King",
+    "director": "Peter Jackson",
+    "time": "201 min",
+    "poster_image": "https://i.etsystatic.com/10683147/r/il/fd0952/3350989948/il_570xN.3350989948_l91u.jpg",
+    "screenshot": "https://m.media-amazon.com/images/M/MV5BMTMwOTc2MDI5NF5BMl5BanBnXkFtZTcwNzk2MTk2Mw@@._V1_.jpg",
+    "synopsis": "Sed Do"
+  },
+  {
+    "id": 6,
+    "title": "The Matrix",
+    "director": "The Wachowskis",
+    "time": "136 min",
+    "poster_image": "https://i.ebayimg.com/images/g/QFQAAOSwAQpfjaA6/s-l1600.jpg",
+    "screenshot": "https://film-grab.com/wp-content/uploads/2017/01/thematrix041.jpg",
+    "synopsis": "Eiusmod Tempor"
+  }
+]
