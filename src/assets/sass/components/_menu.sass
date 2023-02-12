@@ -8,10 +8,11 @@
   height: 100vh
   background-color: rgba(0, 0, 0, 0.2)
   backdrop-filter: blur(2px)
+  z-index: 2
 
   &__overlay
     width: 480px
-    height: 550px
+    height: 450px
     background: #290E3D
     position: absolute
     margin: 100px 7.5%
@@ -32,10 +33,11 @@
       background-size: 0 100%
       background-repeat: no-repeat
       transition: .4s
-      &--icono
-        font-size: 30px
-        color: white
-        padding: 15px
+      cursor: pointer
+
+      img
+        width: 35px
+        margin: 15px
 
       &--texto
         font-size: 4rem
@@ -55,6 +57,7 @@
       display: flex
       align-items: center
       justify-content: center
+      cursor: pointer
 
       &--fondo
         width: 100%

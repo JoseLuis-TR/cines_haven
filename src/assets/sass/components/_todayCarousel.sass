@@ -1,0 +1,77 @@
+@use "../utilities/variables" as v
+
+.carousel
+  width: 800px
+  height: 400px
+  display: flex
+  justify-content: center
+  position: relative
+  overflow: hidden
+  &__container
+    width: 100%
+    max-width: 800px
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    margin: 0 auto
+    overflow: hidden
+    display: flex
+    align-items: center
+    justify-content: center
+
+    &--image
+      max-width: 1080px
+
+
+    &__cuadroTexto
+      width: 100%
+      height: 90px
+      position: absolute
+      bottom: 0
+      background: linear-gradient(0deg, rgba(0, 0, 0, 1) 20%, rgba(255, 255, 255, 0) 100%)
+      transition: 0.5s
+      display: flex
+      justify-content: center
+
+      &--title
+        font-size: 3rem
+        font-family: v.$fjalla-font
+        text-align: center
+        color: white
+        position: absolute
+        bottom: 0
+        padding-bottom: 20px
+
+  &__controls
+    justify-self: flex-end
+    margin-top: 20px
+    &--indicators
+      margin: 0 15px
+      width: 24px
+      height: 24px
+      border: none
+      background: #ffffff
+      border-radius: 50%
+      cursor: pointer
+      transition: all 0.5s ease-in
+
+
+    &--indicators:hover
+      box-shadow: inset v.$detail-color 0 0 10px
+
+.activeIndicator
+  background: v.$detail-color
+
+
+.movie_in_view-enter-active,
+.movie_in_view-leave-active
+  transition: all 1s ease-in-out
+
+.movie_in_view-enter-from
+  transform: translateX(-100%)
+
+.movie_in_view-leave-to
+  transform: translateX(100%)

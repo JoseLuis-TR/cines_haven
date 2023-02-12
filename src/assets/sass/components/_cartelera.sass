@@ -2,33 +2,150 @@
 
 .sliderSinceToday
   width: 100%
+  max-width: 1000px
   height: 50px
-  background-color: v.$form-color_lighter
+  background-color: v.$form-color_medium
+  font-family: v.$mulish-font
+  color: white
   display: flex
   justify-content: space-between
-  &__previousButton
+
+
+  &__sliderButton
     flex: 0 1 auto
     width: 50px
     height: 50px
-    font-size: 20px
-  &__previousButton::after
-    content: "<-"
-  &__nextButton
-    flex: 0 1 auto
-    width: 50px
-    height: 50px
-    font-size: 20px
-  &__nextButton::after
-    content: "->"
+    display: flex
+    justify-content: center
+    align-items: center
+    outline: none
+    border: none
+    background-color: white
+    cursor: pointer
+    transition: all 0.3s
+
+
+    img
+      width: 100%
+
+  &__sliderButton:hover
+    background-color: v.$detail-color
+
+
   &__item
     flex: 1 1 auto
     width: 50px
     height: 50px
-    font-size: 3rem
+    font-size: 2rem
+    text-align: center
+    display: flex
+    justify-content: center
+    align-items: center
+    cursor: pointer
+    transition: all 0.3s
 
-.infoMovies
-  p
-    font-size: 20px
+
+  &__item:hover
+    color: black
+    background-color: v.$detail-color
 
 .selected
-  background-color: yellow
+  background-color: v.$form-color_darker
+  font-weight: 700
+
+.infoMovies
+  width: 100%
+  font-family: v.$mulish-font
+  max-width: 1000px
+
+  &__item
+    display: flex
+    justify-content: space-around
+    width: 100%
+    height: 200px
+    padding-top: 20px
+    gap: 15px
+
+    &__data
+      display: grid
+      grid-template-columns: fit-content(50%) 1fr
+      grid-template-rows: 1fr 1fr
+      grid-template-areas: "Poster Titulo" "Poster Sala"
+      background-color: rgba(0, 0, 0, 0.5)
+      min-width: 35%
+      width: 35%
+      max-width: 450px
+      color: white
+
+      &--poster
+        grid-area: Poster
+        align-self: center
+        justify-self: center
+        width: 100px
+        margin: 15px 15px
+        cursor: pointer
+        transition: all 0.7s
+
+      &--poster:hover
+        transform: translateX(10px) translateY(-10px)
+        box-shadow: v.$detail-color -10px 10px
+
+      &--titulo
+        grid-area: Titulo
+        width: 80%
+        text-align: center
+        font-size: 2rem
+        font-weight: 800
+        align-self: center
+        justify-self: center
+        overflow: hidden
+        display: -webkit-box
+        -webkit-box-orient: vertical
+        text-overflow: ellipsis
+        -webkit-line-clamp: 2
+        cursor: pointer
+
+      &--titulo:hover
+        text-decoration: underline v.$detail-color
+
+      &--sala
+        grid-area: Sala
+        font-size: 20px
+        align-self: center
+        justify-self: center
+        width: fit-content
+        height: fit-content
+        text-align: center
+        color: black
+        font-weight: 700
+        background-color: v.$detail-color
+        padding: 5px
+
+    &__data:hover
+      background-color: black
+
+    &__times
+      background-color: rgba(0, 0, 0, 0.5)
+      flex-grow: 1
+      width: fit-content
+      display: flex
+      align-items: flex-start
+      padding: 15px 10px
+      flex-wrap: wrap
+
+      &--hour
+        font-size: 2.5rem
+        font-weight: 500
+        color: white
+        background-color: v.$form-color_medium
+        padding: 10px
+        margin: 0 10px
+        cursor: pointer
+        transition: all 0.3s
+
+      &--hour:hover
+        background-color: v.$detail-color
+        color: black
+
+    &__times:hover
+      background-color: black

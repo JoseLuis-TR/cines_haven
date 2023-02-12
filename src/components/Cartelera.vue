@@ -1,24 +1,36 @@
 <template>
   <section v-if="sinceToday" class="sliderSinceToday">
     <button
-        class="sliderSinceToday__previousButton"
+        class="sliderSinceToday__sliderButton"
         @click="showPreviousDates">
-      <ion-icon name="caret-back-outline"></ion-icon>    </button>
+      <img src="src/assets/icons/left.svg" alt="Atras">
+    </button>
     <section
         class="sliderSinceToday__item"
         v-for="date in visibleDates"
-        :key="date"
-        @click="showHours(date)"
-        :class="{'selected': date === selectedDate}">
-      {{date}}
+        :key="date.date"
+        @click="toggleClass(date.date)"
+        v-bind:class="{'selected': date.date === selectedDate}"
+        >
+      {{date.formattedDate}}
     </section>
     <button
-        class="sliderSinceToday__nextButton"
+        class="sliderSinceToday__sliderButton"
         @click="showNextDates">
+      <img src="src/assets/icons/right.svg" alt="Siguiente">
     </button>
   </section>
   <section v-if="moviesList" class="infoMovies">
-    <p v-for="session in moviesList">{{session}}</p>
+    <section class="infoMovies__item" v-for="session in moviesList">
+      <section class="infoMovies__item__data">
+        <img class="infoMovies__item__data--poster" :src="session.moviePoster" alt="Poster pelicula">
+        <p class="infoMovies__item__data--titulo">{{session.movieName}}</p>
+        <p class="infoMovies__item__data--sala">{{session.roomName}}</p>
+      </section>
+      <section class="infoMovies__item__times">
+        <p class="infoMovies__item__times--hour" v-for="hour in session.time" >{{hour}}</p>
+      </section>
+    </section>
   </section>
 </template>
 
@@ -33,6 +45,11 @@ export default {
       index: 0,
       selectedDate: "",
       moviesList: []
+    }
+  },
+  watch:{
+    selectedDate: function (val) {
+      this.showHours(val)
     }
   },
   methods:{
@@ -52,7 +69,6 @@ export default {
       this.dates.sort(function (a, b) {
         return new Date(a) - new Date(b)
       })
-      console.log(this.dates)
     },
     showPreviousDates(){
       if(this.index > 0){
@@ -67,15 +83,30 @@ export default {
       }
     },
     updateVisibleDates(){
-      this.visibleDates = this.dates.slice(this.index, this.index + 4)
-      if(this.visibleDates.length < 4){
-        this.visibleDates.push(...Array(4-this.visibleDates.length).fill(""));
-      }
+      this.visibleDates = []
+      const wantedDates = this.dates.slice(this.index, this.index + 4)
+      wantedDates.forEach(date => {
+        let dateString ;
+        let dateParts = date.split("/")
+        let formattedDate = new Date(dateParts[2], dateParts[1]-1, dateParts[0])
+        let tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+
+        if(formattedDate.toDateString() === tomorrow.toDateString()){
+          dateString = "Mañana"
+        } else {
+          const options = {day: "numeric", month: "2-digit", weekday: "long"};
+          dateString = formattedDate.toLocaleDateString("es-ES",options).replace(",","");
+        }
+
+        this.visibleDates.push({date:date, formattedDate: dateString})
+      })
     },
     showHours(date){
       this.moviesList = this.sinceToday.filter(
           session => session.date === date
       )
+    },
+    toggleClass(date){
       this.selectedDate = date;
     }
   },
@@ -83,6 +114,7 @@ export default {
     await this.getSinceTodaySessions()
     this.sortDates()
     this.updateVisibleDates()
+    this.selectedDate = this.dates[0]
   }
 }
 </script>

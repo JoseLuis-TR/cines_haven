@@ -3,22 +3,25 @@
   <main>
     <article class="released">
       <h2 class="released__title">Hoy en cartelera</h2>
-      <h2 v-for="item in todaySessions" class="released__title">{{ item }}</h2>
+      <TodayCarousel></TodayCarousel>
     </article>
     <article class="toBeReleased">
       <h2 class="toBeReleased__title">Cartelera de los próximos días</h2>
       <Cartelera></Cartelera>
     </article>
   </main>
+  <Footer></Footer>
 </template>
 
 <script>
 import Header from "./Header.vue";
 import {defineComponent} from "vue";
 import Cartelera from "./Cartelera.vue";
+import TodayCarousel from "./carousel/TodayCarousel.vue";
+import Footer from "./Footer.vue";
 
 export default defineComponent({
-  components: {Cartelera, Header},
+  components: {Footer, TodayCarousel, Cartelera, Header},
   data(){
     return{
       todaySessions : [],

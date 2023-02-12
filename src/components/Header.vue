@@ -2,7 +2,7 @@
   <header class="header">
     <RouterLink to="/" class="header__logocontainer" ><img class="header__logocontainer--logo" src="src/assets/images/logoHaven.png" alt="Logo Cines Heaven"></RouterLink>
     <div class="header__spacer"></div>
-    <ion-icon class="header__icon" name="menu-outline" @click="handleMenu"></ion-icon>
+    <img class="header__icon" src="src/assets/icons/menu.svg" alt="Menu" @click="handleMenu">
   </header>
   <menu-overlay
       :is-opened="showMenu"
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import {ref} from "vue";
 import MenuOverlay from "./MenuOverlay.vue";
 import LRUser from "./LRUser.vue";
 import Contact from "./Contact.vue";
