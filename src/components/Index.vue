@@ -21,22 +21,7 @@ import TodayCarousel from "./carousel/TodayCarousel.vue";
 import Footer from "./Footer.vue";
 
 export default defineComponent({
-  components: {Footer, TodayCarousel, Cartelera, Header},
-  data(){
-    return{
-      todaySessions : [],
-      sinceToday : [],
-    }
-  },
-  async created() {
-    this.todaySessions = await this.getTodaySessions();
-    },
-  methods: {
-    async getTodaySessions() {
-      let response = await fetch('http://localhost:3001/havenV1/sessions/today')
-      return response.json();
-    }
-  }
+  components: {Footer, TodayCarousel, Cartelera, Header}
 })
 
 </script>

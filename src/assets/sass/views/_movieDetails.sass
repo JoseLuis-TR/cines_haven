@@ -1,0 +1,113 @@
+@use "../utilities/variables" as v
+
+.mainDetails
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center 
+
+.containerBG
+    width: 70%
+    height: 500px
+    overflow: hidden
+    min-width: 900px
+    position: absolute
+    top: 0
+    left: 50%
+    transform: translateX(-50%)
+    z-index: -1
+    display: flex
+    justify-content: center
+    
+    &__image
+        min-width: 1100px
+        height: auto
+        position: absolute
+        top: 0
+        -webkit-mask-image: url('src/assets/images/mask-product2.png')
+        -webkit-mask-size: 1200px 500px
+        mask-position: top center
+
+.containerInfo
+    box-shadow: 0 0 5px transparent
+    display: grid
+    grid-template-columns: auto 1fr
+    grid-template-rows: 1fr auto auto
+    gap: 0px 0px
+    grid-template-areas: "poster nombre" "poster director" "poster minutos"
+    width: 100%
+    height: 350px
+    min-width: 800px
+    margin-top: 300px
+    color: white
+
+    &__poster
+        grid-area: poster
+        height: 350px
+        width: auto
+        margin-left: 20%
+        outline: 5px solid v.$form-color_lighter
+        border-radius: 5px
+
+    &__titulo
+        grid-area: nombre
+        font-size: 6rem
+        font-family: v.$fjalla-font
+        align-self: center
+        padding-left: 10%
+
+    &__director
+        grid-area: director
+        font-size: 3rem
+        font-family: v.$mulish-font
+        height: fit-content
+        font-weight: 100
+        padding-left: 10%
+        b
+            font-size: 3rem
+            font-weight: 600
+
+    &__minutos
+        grid-area: minutos
+        height: fit-content
+        font-size: 3rem
+        align-self: flex-end
+        font-family: v.$mulish-font
+        font-weight: 100
+        padding-left: 10%
+        
+
+.containerData
+    width: 100%
+    padding-left: 3%
+    min-width: 800px
+    padding-top: 3%
+    color: white
+    display: flex
+    flex-direction: column
+    align-items: center
+
+    &__title
+        font-size: 6rem
+        font-family: v.$merriweather-font
+        align-self: flex-start
+        
+    &__underline
+        border-bottom: 10px solid v.$form-color-lighter
+        display: block
+        margin-top: 10px
+        width: 100%
+    
+    &__sinopsis
+        color: white
+        font-size: 2.5rem
+        font-family: v.$mulish-font
+        padding-top: 2rem
+        
+    &__trailer
+        aspect-ratio: 16/9
+        width: 50%
+        align-self: center
+        padding-top: 5rem
+
+    

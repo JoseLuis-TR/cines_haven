@@ -8,36 +8,37 @@
       :is-opened="showMenu"
       @close-menu="handleMenu"
       @user-form="openUserForm"
-      @contact-form="openContactMenu">
+      @open-profile="openProfile">
   </menu-overlay>
   <LRUser
       :is-needed="showForm"
       @close-user-Form="handleUserForm">
   </LRUser>
-  <Contact
-      :need-contact="showContact"
-      @close-contact="handleContact">
-  </Contact>
+  <Profile
+      :need-profile="showProfile"
+      @close-profile="handleProfile">
+</Profile>
 </template>
 
 <script>
 import MenuOverlay from "./MenuOverlay.vue";
 import LRUser from "./LRUser.vue";
-import Contact from "./Contact.vue";
+import Profile from "./Profile.vue";
 
 export default {
   name: "Header",
-  components: {Contact, LRUser, MenuOverlay},
+  components: {Profile, LRUser, MenuOverlay},
   data(){
     return {
       showMenu: false,
       showForm: false,
-      showContact: false
+      showProfile: false
     }
   },
   methods: {
     handleMenu(){
       this.showMenu = !this.showMenu
+      console.log(JSON.parse(localStorage.getItem('user')))
     },
     openUserForm(){
       this.showMenu = !this.showMenu
@@ -46,12 +47,12 @@ export default {
     handleUserForm(){
       this.showForm = !this.showForm
     },
-    openContactMenu(){
+    openProfile(){
       this.showMenu = !this.showMenu
-      this.showContact = !this.showContact
+      this.showProfile = !this.showProfile
     },
-    handleContact(){
-      this.showContact = !this.showContact
+    handleProfile(){
+      this.showProfile = !this.showProfile
     }
   }
 }

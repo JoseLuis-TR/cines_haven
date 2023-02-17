@@ -1,5 +1,9 @@
 <template>
-  <section v-if="sinceToday" class="sliderSinceToday">
+  <article class="loadingScreen" v-if="isLoading">
+    <LoadingScreen
+        mensaje-carga="Cargando cartelera de los próximos días.."></LoadingScreen>
+  </article>
+  <section v-else class="sliderSinceToday">
     <button
         class="sliderSinceToday__sliderButton"
         @click="showPreviousDates">
@@ -20,11 +24,18 @@
       <img src="src/assets/icons/right.svg" alt="Siguiente">
     </button>
   </section>
-  <section v-if="moviesList" class="infoMovies">
+  <section  class="infoMovies">
     <section class="infoMovies__item" v-for="session in moviesList">
       <section class="infoMovies__item__data">
-        <img class="infoMovies__item__data--poster" :src="session.moviePoster" alt="Poster pelicula">
-        <p class="infoMovies__item__data--titulo">{{session.movieName}}</p>
+        <img class="infoMovies__item__data--poster" 
+              :src="session.moviePoster"
+              alt="Poster pelicula"
+              @click="seeMovieDetails(session.movie_id)">
+        <p 
+          class="infoMovies__item__data--titulo"
+          @click="seeMovieDetails(session.movie_id)">
+          {{session.movieName}}
+        </p>
         <p class="infoMovies__item__data--sala">{{session.roomName}}</p>
       </section>
       <section class="infoMovies__item__times">
@@ -35,8 +46,11 @@
 </template>
 
 <script>
+import LoadingScreen from "./LoadingScreen.vue";
+
 export default {
   name: "Cartelera",
+  components: {LoadingScreen},
   data(){
     return{
       sinceToday : [],
@@ -44,7 +58,8 @@ export default {
       visibleDates: [],
       index: 0,
       selectedDate: "",
-      moviesList: []
+      moviesList: [],
+      isLoading: false
     }
   },
   watch:{
@@ -54,8 +69,12 @@ export default {
   },
   methods:{
     async getSinceTodaySessions(){
-      let response = await fetch('http://localhost:3001/havenV1/sessions/sincetoday')
-      this.sinceToday = await response.json()
+      return await fetch('https://backcines-haven.onrender.com/havenv1/sessions/sincetoday')
+          .then(response => response.json())
+          .then(data => {
+            this.sinceToday = data
+            this.isLoading = false
+          })
     },
     sortDates(){
       let uniqueDates = new Set();
@@ -108,9 +127,13 @@ export default {
     },
     toggleClass(date){
       this.selectedDate = date;
+    },
+    seeMovieDetails(movieID){
+      this.$router.push(`pelicula/${movieID}`)
     }
   },
   async mounted() {
+    this.isLoading = true
     await this.getSinceTodaySessions()
     this.sortDates()
     this.updateVisibleDates()

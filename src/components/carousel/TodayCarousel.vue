@@ -1,39 +1,54 @@
 <template>
-  <section
-      class="carousel">
-    <carousel-item
-        v-for="(movie, index) in this.moviesToday"
-        :today-movie="movie"
-        :key="`movie-${index}`"
-        :current-movie="currentMovie"
-        :index="index"
-        @mouseenter="this.stopMovieInterval"
-        @mouseleave="this.startMovieInterval"></carousel-item>
-  </section>
-  <carousel-indicators
-      :total="moviesToday.length"
-      :current-index="currentMovie"
-      @change-movie="changeMovie($event)">
-  </carousel-indicators>
+  <article class="loadingScreen" v-if="isLoading">
+  <LoadingScreen
+      mensaje-carga="Cargando cartelera de hoy.."></LoadingScreen>
+  </article>
+  <Transition v-else name="todayCartelera">
+    <article>
+      <section
+          class="carousel">
+        <carousel-item
+            v-for="(movie, index) in this.moviesToday"
+            :today-movie="movie"
+            :key="`movie-${index}`"
+            :current-movie="currentMovie"
+            :index="index"
+            @mouseenter="this.stopMovieInterval"
+            @mouseleave="this.startMovieInterval"></carousel-item>
+      </section>
+      <carousel-indicators
+          :total="moviesToday.length"
+          :current-index="currentMovie"
+          @change-movie="changeMovie($event)">
+      </carousel-indicators>
+    </article>
+  </Transition>
 </template>
 
 <script>
 import CarouselItem from "./CarouselItem.vue";
 import CarouselIndicators from "./CarouselIndicators.vue";
+import LoadingScreen from "../LoadingScreen.vue";
 export default {
   name: "TodCarousel",
-  components: {CarouselIndicators, CarouselItem},
+  components: {LoadingScreen, CarouselIndicators, CarouselItem},
   data(){
     return{
       moviesToday : [],
       currentMovie : 0,
-      movieInterval: null
+      movieInterval: null,
+      isLoading: false
     }
   },
   methods:{
     async getTodaySessions() {
-      let response = await fetch('http://localhost:3001/havenV1/sessions/today')
-      this.moviesToday = await response.json()
+      return await fetch('https://backcines-haven.onrender.com/havenv1/sessions/today')
+          .then(response => response.json())
+          .then(data => {
+            this.moviesToday = data
+            console.log(this.moviesToday)
+            this.isLoading = false
+          })
     },
     setCurrentMovie(index){
       this.currentMovie = index;
@@ -54,6 +69,7 @@ export default {
     }
   },
   async mounted() {
+    this.isLoading = true
     await this.getTodaySessions()
     this.startMovieInterval()
   },

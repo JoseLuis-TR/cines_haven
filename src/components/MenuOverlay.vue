@@ -3,18 +3,25 @@
     <article class="menuContainer" v-if="isOpened" @click.self="$emit('close-menu')">
       <Transition name="menuModal" appear>
         <nav class="menuContainer__overlay">
-          <header class="menuContainer__overlay__header" @click="handleUser">
+          <header v-if="isUserLogged()" @click="openProfile" class="menuContainer__overlay__header">
             <img class="menuContainer__overlay__header--fondo" src="src/assets/images/spacejam.jpg" alt="Fondo Web">
-            <p class="menuContainer__overlay__header--texto">Registrese<br>o<br>Inicie sesión</p>
+            <p class="menuContainer__overlay__header--texto">{{getNick()}}</p>
+          </header>
+          <header v-else class="menuContainer__overlay__header" @click="handleUser">
+            <img class="menuContainer__overlay__header--profilePicture" src="src/assets/images/spacejam.jpg" alt="Fondo Web">
+            <p class="menuContainer__overlay__header--texto">Inicie sesión<br>o<br>Registrese</p>
           </header>
           <router-link to="/" class="menuContainer__overlay__enlace">
             <img src="src/assets/icons/home.svg" alt="Inicio">
             <p class="menuContainer__overlay__enlace--texto">Inicio</p>
           </router-link>
-          <a class="menuContainer__overlay__enlace" @click="handleContact">
-            <img src="src/assets/icons/mail.svg" alt="Contacto">
-            <p class="menuContainer__overlay__enlace--texto">Contacto</p>
-          </a>
+          <section 
+              v-if="isUserLogged()"
+              @click="logOut"
+              class="menuContainer__overlay__enlace logout">
+            <img src="src/assets/icons/log-out.svg" alt="Cierre de sesión">
+            <p class="menuContainer__overlay__enlace--texto">Cerrar sesión</p>
+          </section>
         </nav>
       </Transition>
     </article>
@@ -35,8 +42,20 @@ export default {
     handleUser(){
       this.$emit('userForm')
     },
-    handleContact(){
-      this.$emit('contactForm')
+    openProfile(){
+      this.$emit('openProfile')
+    },
+    isUserLogged(){
+      console.log(localStorage.getItem('user'))
+      return localStorage.getItem('user') !== null
+    },
+    getNick(){
+      return JSON.parse(localStorage.getItem('user')).nick
+    },
+    logOut(){
+      localStorage.removeItem('user')
+      if(this.$route.path === "/") this.$router.go()
+      else this.$router.push("/");
     }
   }
 }
