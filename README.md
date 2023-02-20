@@ -21,7 +21,7 @@ En esta primera versión la aplicación es capaz de:
 
 ## Tecnologías usadas
 
-Esta primera versión ha sido creada con las siguientes tecnologías:
+Esta primera versión ha sido creada con las siguientes tecnologías y librerias:
 
 - FrontEnd
   - [Vue.js](https://vuejs.org/)
@@ -30,6 +30,8 @@ Esta primera versión ha sido creada con las siguientes tecnologías:
   - [Vuetify](https://vuetifyjs.com/en/)
   - [Crypto-js](https://www.npmjs.com/package/crypto-js)
   - [Sass](https://sass-lang.com/)
+  - [Ionicons](https://ionicons.com/)
+  - [Google Fonts](https://fonts.google.com/)
 - Backend
   - [Node.js](https://nodejs.org/es/)
   - [Express](https://expressjs.com/es/)
