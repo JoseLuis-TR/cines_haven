@@ -43,7 +43,20 @@
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
 import CarteleraDetails from "./CarteleraDetails.vue";
-
+/**
+ * @file MovieDetails.vue - Componente que muestra los detalles de una pelicula
+ * @author José Luis Tocino Rojo
+ * @see <a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github</a>
+ */
+/**
+ * @property {string} name - Nombre del componente
+ * @property {object} components - Componentes que se renderizan en el componente
+ * @property {Object} components.Header - Componente header de la aplicación
+ * @property {Object} components.Footer - Componente footer de la aplicación
+ * @property {Object} components.CarteleraDetails - Componente que muestra las sesiones de una pelicula en los siguientes dias
+ * @vue-data {Array} movieDetails - Array que contiene los detalles de la pelicula
+ * @vue-data {boolean} [isLoading = false] - Indica si se está cargando la información de la pelicula
+*/
 export default {
   name: "movieDetails",
   components: { Footer, Header, CarteleraDetails },
@@ -54,6 +67,11 @@ export default {
     }
   },
   methods:{
+    /**
+     * Obtiene los detalles de una pelicula
+     * @param {string} movieID - ID de la pelicula
+     * @returns {Promise} - Promise que devuelve los detalles de la pelicula
+     */
     async getMovieDetails(movieID){
       this.isLoading = true
       return await fetch(`https://backcines-haven.onrender.com/havenV1/movies/${movieID}`)
@@ -64,6 +82,9 @@ export default {
           })
     }
   },
+  /**
+   * Obtiene los detalles de la pelicula al cargar el componente y cambia el titulo de la pagina
+   */
   async mounted(){
     await this.getMovieDetails(this.$route.params.id);
     document.title = `Cines Haven - ${this.movieDetails[0].title}`

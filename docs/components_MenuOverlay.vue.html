@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/MenuOverlay.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/MenuOverlay.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;Transition name="menuBackground">
+    &lt;article class="menuContainer" v-if="isOpened" @click.self="$emit('close-menu')">
+      &lt;Transition name="menuModal" appear>
+        &lt;nav class="menuContainer__overlay">
+          &lt;header v-if="isUserLogged()" @click="openProfile" class="menuContainer__overlay__header">
+            &lt;img class="menuContainer__overlay__header--fondo" src="../assets/images/spacejam.jpg" alt="Fondo Web">
+            &lt;img class="menuContainer__overlay__header--fotoPerfil" :src="getProfilePic()" alt="Fondo Web">
+            &lt;p class="menuContainer__overlay__header--texto">{{getNick()}}&lt;/p>
+          &lt;/header>
+          &lt;header v-else class="menuContainer__overlay__header" @click="handleUser">
+            &lt;img class="menuContainer__overlay__header--fondo" src="../assets/images/spacejam.jpg" alt="Fondo Web">
+            &lt;p class="menuContainer__overlay__header--texto">Inicie sesión&lt;br>o&lt;br>Registrese&lt;/p>
+          &lt;/header>
+          &lt;router-link to="/" class="menuContainer__overlay__enlace">
+            &lt;img src="../assets/icons/home.svg" alt="Inicio">
+            &lt;p class="menuContainer__overlay__enlace--texto">Inicio&lt;/p>
+          &lt;/router-link>
+          &lt;section 
+              v-if="isUserLogged()"
+              @click="logOut"
+              class="menuContainer__overlay__enlace logout">
+            &lt;img src="../assets/icons/log-out.svg" alt="Cierre de sesión">
+            &lt;p class="menuContainer__overlay__enlace--texto">Cerrar sesión&lt;/p>
+          &lt;/section>
+        &lt;/nav>
+      &lt;/Transition>
+    &lt;/article>
+  &lt;/Transition>
+&lt;/template>
+
+&lt;script>
+/**
+ * @file MenuOverlay.vue - Componente que contiene el menú de navegación de la aplicación
+ * @author José Luis Tocino Rojo
+ * @see &lt;a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github&lt;/a>
+ */
+
+/**
+ * @property {string} name - Nombre del componente
+ * @property {Object} emits - Eventos que emite el componente
+ * @property {Object} emits.close-menu - Evento que emite el componente para cerrar el menú
+ * @property {Object} emits.user-form - Evento que emite el componente para abrir el formulario de login o registro
+ * @property {Object} emits.open-profile - Evento que emite el componente para abrir el perfil del usuario
+ * @vue-prop {boolean} [isOpened = false] - Indica si se muestra el menú de navegación
+ */
+export default {
+  name: "MenuOverlay",
+  emits: ['userForm', 'openProfile', 'close-menu'],
+  props: {
+    isOpened: {
+    type: Boolean,
+    default: false
+    }
+  },
+  methods: {
+    /**
+     * Función que emite el evento user-form para abrir el formulario de login o registro
+     */
+    handleUser(){
+      this.$emit('userForm')
+    },
+    /**
+     * Función que emite el evento open-profile para abrir la pagina de modificación de perfil
+     */
+    openProfile(){
+      this.$emit('openProfile')
+    },
+    /**
+     * Función que comprueba si el usuario está logueado
+     * @returns {boolean} - Devuelve true si el usuario está logueado
+     */
+    isUserLogged(){
+      return localStorage.getItem('user') !== null
+    },
+    /**
+     * Función que devuelve el nick del usuario logueado
+     * @returns {string} - Nick del usuario logueado
+     */
+    getNick(){
+      return JSON.parse(localStorage.getItem('user')).nick
+    },
+    /**
+     * Función que devuelve la url de la foto de perfil del usuario logueado
+     * @returns {string} - Url de la foto de perfil del usuario logueado
+     */
+    getProfilePic(){
+      const userPic = JSON.parse(localStorage.getItem('user'))
+      console.log(userPic.profilePicture)
+      // Si existe una imagen de perfil, se devuelve la url de la imagen
+      if (userPic.profilePicture !== "") {
+        return `https://backcines-haven.onrender.com/${userPic.profilePicture}`
+      } else {
+        // Si no existe una imagen de perfil, se devuelve la imagen por defecto
+        return `src/assets/images/default.svg`
+      }
+    },
+    /**
+     * Función que elimina el usuario logueado del localStorage y redirige a la página de inicio
+     */
+    logOut(){
+      localStorage.removeItem('user')
+      if(this.$route.path === "/") this.$router.go()
+      else this.$router.push("/");
+    }
+  }
+}
+&lt;/script></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BuyConfirmation.html">BuyConfirmation</a></li><li><a href="module-CarouselIndicators.html">CarouselIndicators</a></li><li><a href="module-CarouselItem.html">CarouselItem</a></li><li><a href="module-Cartelera.html">Cartelera</a></li><li><a href="module-CarteleraDetails.html">CarteleraDetails</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-Functions_PassOperations.html">Functions_PassOperations</a></li><li><a href="module-Functions_Validations.html">Functions_Validations</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Index.html">Index</a></li><li><a href="module-LRUser.html">LRUser</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MenuOverlay.html">MenuOverlay</a></li><li><a href="module-MovieDetails.html">MovieDetails</a></li><li><a href="module-Profile.html">Profile</a></li><li><a href="module-TodayCarousel.html">TodayCarousel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 20 2023 20:02:56 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

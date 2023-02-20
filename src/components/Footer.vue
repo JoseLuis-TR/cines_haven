@@ -13,11 +13,16 @@
 </template>
 
 <script>
+/**
+ * @file Footer.vue - Componente que contiene el footer de la aplicación
+ * @author José Luis Tocino Rojo
+ * @see <a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github</a>
+ */
+
+/**
+ * @property {string} name - Nombre del componente
+ */
 export default {
   name: "Footer"
 }
 </script>
-
-<style scoped>
-
-</style>

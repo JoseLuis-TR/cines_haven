@@ -69,7 +69,30 @@ import {
 import { 
   encriptarPass,
   compararPass } from "../functions/hashpass.js";
+/**
+ * @file LRUser.vue - Componente que contiene el formulario de login y registro
+ * @author José Luis Tocino Rojo
+ * @see <a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github</a>
+ */
 
+/**
+ * @property {Object} name - Nombre del componente
+ * @vue-prop {Boolean} [isNeeded = false] - Indica si el componente debe mostrarse o no
+ * @property {Object} emits - Eventos que emite el componente
+ * @property {Object} emits.close-userForm - Evento que emite el componente para cerrarse
+ * @vue-data {String} [showForm = login] - Indica si se muestra el formulario de login o registro
+ * @vue-data {String} userLog - Almacena el valor del input de usuario del formulario de login
+ * @vue-data {String} passLog - Almacena el valor del input de contraseña del formulario de login
+ * @vue-data {String} messageError - Almacena el mensaje de error que se muestra en el formulario
+ * @vue-data {String} emailReg - Almacena el valor del input de email del formulario de registro
+ * @vue-data {String} nickReg - Almacena el valor del input de usuario del formulario de registro
+ * @vue-data {String} passReg - Almacena el valor del input de contraseña del formulario de registro
+ * @vue-data {String} repPassReg - Almacena el valor del input de repetir contraseña del formulario de registro
+ * @vue-data {Boolean} [regexEmailOk = true] - Indica si el email introducido es válido
+ * @vue-data {Boolean} [regexUserOk = true] - Indica si el usuario introducido es válido
+ * @vue-data {Boolean} [regexPassOk = true] - Indica si la contraseña introducida es válida
+ * @vue-data {Boolean} [repeatPassOk = true] - Indica si las contraseñas introducidas coinciden
+ */
 export default {
   name: "LRUser",
   props: {
@@ -95,16 +118,24 @@ export default {
       repeatPassOk: true
     }
   },
+  // Se detecta cambios en el formulario que debe enseñarse y se resetea el mensaje de error
   watch: {
     showForm(){
       this.messageError = "";
     }
   },
   methods:{
+    /**
+     * Revisa el login del usuario
+     * @param {String} logUser - Nombre de usuario
+     * @param {String} logPass - Contraseña
+     */
     async checkLogin(logUser,logPass){
+      // Se llama a la api usando el nombre de usuario
       await fetch(`https://backcines-haven.onrender.com/havenV1/users/${logUser}`)
           .then(response => response.json())
           .then(data => {
+            // Se comprueba si el usuario existe y si la contraseña es correcta
             if(data === false){
               this.messageError = "El usuario no existe"
             } else if(!compararPass(logPass,data[0].password)){
@@ -117,33 +148,58 @@ export default {
             }
           })
     },
+    /**
+     * Valida el email introducido
+     */
     validateEmail() {
       this.regexEmailOk = validateEmailRegex(this.emailReg)
     },
+    /**
+     * Valida el usuario introducido
+     */
     validateUser() {
       this.regexUserOk = validateUserRegex(this.nickReg)
     },
+    /**
+     * Valida la contraseña introducida
+     */
     validatePass() {
       this.regexPassOk = validatePasswordRegex(this.passReg)
     },
+    /**
+     * Valida que las contraseñas introducidas coinciden
+     */
     validateRepeatPass(){
       this.repeatPassOk = validateSamePassRegex(this.repPassReg,this.passReg)
     },
+    /**
+     * Revisa que todos los campos del formulario de registro estén rellenos y sean válidos
+     * @returns {Boolean} - Indica si todos los campos son válidos
+     */
     lastCheckReg(){
       if(this.regexEmailOk && this.regexUserOk && this.regexPassOk && this.repeatPassOk)
         if(this.emailReg !== '' && this.nickReg !== '' && this.passReg !== '' && this.repPassReg !== '')
           return true
       return false
     },
+    /**
+     * Crea un nuevo usuario llamando a la api
+     * @param {String} emailReg - Email del usuario
+     * @param {String} userReg - Nombre de usuario
+     * @param {String} passReg - Contraseña
+     */
     async createNewUser(emailReg, userReg, passReg){
+      // Se comprueba que todos los campos sean válidos
       if(this.lastCheckReg()){
         this.messageError = ''
+        // Se crea el objeto con los datos del usuario
         const newUser = {
           "nick" : userReg,
           "email" : emailReg,
           "password" : encriptarPass(passReg)
         }
 
+        // Se llama a la api para crear el usuario
         await fetch('https://backcines-haven.onrender.com/havenV1/users', {
           method: 'POST',
           headers: {
@@ -152,6 +208,7 @@ export default {
           body: JSON.stringify(newUser)})
             .then(response => response.json())
             .then(data => {
+                  // Se comprueba si el usuario se ha creado correctamente
                   if(Object.keys(data).length > 1){
                     this.messageError = "Registro Completado"
                     if(this.$route.path === "/") this.$router.go()
@@ -163,6 +220,7 @@ export default {
             )
 
       } else {
+        // Se muestra un mensaje de error si no se han rellenado todos los campos
         this.messageError = 'Formulario no completo'
       }
     }

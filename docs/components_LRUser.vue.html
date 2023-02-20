@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/LRUser.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/LRUser.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;Transition name="formBackground">
+    &lt;article class="formBG" v-if="isNeeded" @click.self="$emit('close-userForm')">
+      &lt;Transition name="formModal">
+        &lt;article class="formContainer">
+          &lt;section class="formContainer__selectors">
+            &lt;button type="button" @click="showForm = 'login'" :class="{btnActivated: showForm === 'login'}">Inicia sesión&lt;/button>
+            &lt;button type="button" @click="showForm= 'register'" :class="{btnActivated: showForm === 'register'}">Regístrate&lt;/button>
+          &lt;/section>
+          &lt;template v-if="showForm === 'login'">
+            &lt;section class="formContainer__body">
+              &lt;p class="formContainer__body--text">Inicia sesión en tu cuenta de cines Haven&lt;/p>
+                &lt;form class="formContainer__body__form" v-on:submit.prevent="checkLogin(userLog,passLog)">
+                  &lt;label for="nick">Usuario&lt;/label>
+                  &lt;input v-model="userLog" id="nick" type="text">
+                  &lt;label for="password">Contraseña&lt;/label>
+                  &lt;input v-model="passLog" id="password" type="password">
+                  &lt;Transition name="errorMessage">
+                    &lt;section v-show="messageError !== ''" class="formContainer__body__form--error">
+                      &lt;ul>
+                        &lt;li>{{this.messageError}}&lt;/li>
+                      &lt;/ul>
+                    &lt;/section>
+                  &lt;/Transition>
+                  &lt;button>Inicia sesión&lt;/button>
+                &lt;/form>
+            &lt;/section>
+          &lt;/template>
+          &lt;template v-else-if="showForm === 'register'">
+            &lt;section class="formContainer__body">
+              &lt;p class="formContainer__body--text">Únete para poder disfrutar de todas las opciones que ofrece Cines Haven&lt;/p>
+              &lt;form class="formContainer__body__form" v-on:submit.prevent="createNewUser(emailReg,nickReg,passReg,repPassReg)">
+                &lt;label for="email">Email&lt;/label>
+                &lt;input v-model="emailReg" v-on:blur="validateEmail" :class="{'input_error' : !regexEmailOk}" id="email" type="email">
+                &lt;label for="username">Usuario&lt;/label>
+                &lt;input v-model="nickReg" v-on:blur="validateUser" :class="{'input_error' : !regexUserOk}" id="username" type="text">
+                &lt;label for="password">Contraseña&lt;/label>
+                &lt;input v-model="passReg" v-on:blur="validatePass" :class="{'input_error' : !regexPassOk}" id="password" type="password">
+                &lt;label for="repPassword">Repetir contraseña&lt;/label>
+                &lt;input v-model="repPassReg" v-on:blur="validateRepeatPass" :class="{'input_error' : !repeatPassOk}" id="repPassword" type="password">
+                &lt;Transition name="errorMessage">
+                  &lt;section v-show="!regexEmailOk || !regexPassOk || !regexUserOk || !repeatPassOk || messageError !== ''" class="formContainer__body__form--error">
+                    &lt;ul>
+                      &lt;li v-if="!regexEmailOk">Email no válido&lt;/li>
+                      &lt;li v-if="!regexUserOk">Usuario no válido [5 a 20 caracteres, sólo letras y números]&lt;/li>
+                      &lt;li v-if="!regexPassOk">Contraseña no válida [8 a 32 caracteres, mayúscula, minúscula, carácter especial y número]&lt;/li>
+                      &lt;li v-if="!repeatPassOk">Las contraseñas no coinciden&lt;/li>
+                      &lt;li v-if="messageError !== ''">{{messageError}}&lt;/li>
+                    &lt;/ul>
+                  &lt;/section>
+                &lt;/Transition>
+                &lt;button>Regístrate&lt;/button>
+              &lt;/form>
+            &lt;/section>
+          &lt;/template>
+        &lt;/article>
+      &lt;/Transition>
+    &lt;/article>
+  &lt;/Transition>
+&lt;/template>
+
+&lt;script>
+import {
+  validateEmailRegex,
+  validatePasswordRegex,
+  validateSamePassRegex,
+  validateUserRegex
+} from "../functions/formValidations.js";
+import { 
+  encriptarPass,
+  compararPass } from "../functions/hashpass.js";
+/**
+ * @file LRUser.vue - Componente que contiene el formulario de login y registro
+ * @author José Luis Tocino Rojo
+ * @see &lt;a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github&lt;/a>
+ */
+
+/**
+ * @property {Object} name - Nombre del componente
+ * @vue-prop {Boolean} [isNeeded = false] - Indica si el componente debe mostrarse o no
+ * @property {Object} emits - Eventos que emite el componente
+ * @property {Object} emits.close-userForm - Evento que emite el componente para cerrarse
+ * @vue-data {String} [showForm = login] - Indica si se muestra el formulario de login o registro
+ * @vue-data {String} userLog - Almacena el valor del input de usuario del formulario de login
+ * @vue-data {String} passLog - Almacena el valor del input de contraseña del formulario de login
+ * @vue-data {String} messageError - Almacena el mensaje de error que se muestra en el formulario
+ * @vue-data {String} emailReg - Almacena el valor del input de email del formulario de registro
+ * @vue-data {String} nickReg - Almacena el valor del input de usuario del formulario de registro
+ * @vue-data {String} passReg - Almacena el valor del input de contraseña del formulario de registro
+ * @vue-data {String} repPassReg - Almacena el valor del input de repetir contraseña del formulario de registro
+ * @vue-data {Boolean} [regexEmailOk = true] - Indica si el email introducido es válido
+ * @vue-data {Boolean} [regexUserOk = true] - Indica si el usuario introducido es válido
+ * @vue-data {Boolean} [regexPassOk = true] - Indica si la contraseña introducida es válida
+ * @vue-data {Boolean} [repeatPassOk = true] - Indica si las contraseñas introducidas coinciden
+ */
+export default {
+  name: "LRUser",
+  props: {
+    isNeeded: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ['close-userForm'],
+  data(){
+    return {
+      showForm: 'login',
+      userLog: '',
+      passLog: '',
+      messageError: '',
+      emailReg: '',
+      nickReg: '',
+      passReg: '',
+      repPassReg: '',
+      regexEmailOk: true,
+      regexUserOk: true,
+      regexPassOk: true,
+      repeatPassOk: true
+    }
+  },
+  // Se detecta cambios en el formulario que debe enseñarse y se resetea el mensaje de error
+  watch: {
+    showForm(){
+      this.messageError = "";
+    }
+  },
+  methods:{
+    /**
+     * Revisa el login del usuario
+     * @param {String} logUser - Nombre de usuario
+     * @param {String} logPass - Contraseña
+     */
+    async checkLogin(logUser,logPass){
+      // Se llama a la api usando el nombre de usuario
+      await fetch(`https://backcines-haven.onrender.com/havenV1/users/${logUser}`)
+          .then(response => response.json())
+          .then(data => {
+            // Se comprueba si el usuario existe y si la contraseña es correcta
+            if(data === false){
+              this.messageError = "El usuario no existe"
+            } else if(!compararPass(logPass,data[0].password)){
+              this.messageError = "Contraseña incorrecta"
+            } else {
+              this.messageError = 'Login correcto'
+              localStorage.setItem('user', JSON.stringify(data[0]))
+              if(this.$route.path === "/") this.$router.go()
+              else this.$router.push("/");
+            }
+          })
+    },
+    /**
+     * Valida el email introducido
+     */
+    validateEmail() {
+      this.regexEmailOk = validateEmailRegex(this.emailReg)
+    },
+    /**
+     * Valida el usuario introducido
+     */
+    validateUser() {
+      this.regexUserOk = validateUserRegex(this.nickReg)
+    },
+    /**
+     * Valida la contraseña introducida
+     */
+    validatePass() {
+      this.regexPassOk = validatePasswordRegex(this.passReg)
+    },
+    /**
+     * Valida que las contraseñas introducidas coinciden
+     */
+    validateRepeatPass(){
+      this.repeatPassOk = validateSamePassRegex(this.repPassReg,this.passReg)
+    },
+    /**
+     * Revisa que todos los campos del formulario de registro estén rellenos y sean válidos
+     * @returns {Boolean} - Indica si todos los campos son válidos
+     */
+    lastCheckReg(){
+      if(this.regexEmailOk &amp;&amp; this.regexUserOk &amp;&amp; this.regexPassOk &amp;&amp; this.repeatPassOk)
+        if(this.emailReg !== '' &amp;&amp; this.nickReg !== '' &amp;&amp; this.passReg !== '' &amp;&amp; this.repPassReg !== '')
+          return true
+      return false
+    },
+    /**
+     * Crea un nuevo usuario llamando a la api
+     * @param {String} emailReg - Email del usuario
+     * @param {String} userReg - Nombre de usuario
+     * @param {String} passReg - Contraseña
+     */
+    async createNewUser(emailReg, userReg, passReg){
+      // Se comprueba que todos los campos sean válidos
+      if(this.lastCheckReg()){
+        this.messageError = ''
+        // Se crea el objeto con los datos del usuario
+        const newUser = {
+          "nick" : userReg,
+          "email" : emailReg,
+          "password" : encriptarPass(passReg)
+        }
+
+        // Se llama a la api para crear el usuario
+        await fetch('https://backcines-haven.onrender.com/havenV1/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newUser)})
+            .then(response => response.json())
+            .then(data => {
+                  // Se comprueba si el usuario se ha creado correctamente
+                  if(Object.keys(data).length > 1){
+                    this.messageError = "Registro Completado"
+                    if(this.$route.path === "/") this.$router.go()
+                    else this.$router.push("/");
+                  } else {
+                    this.messageError = data.message
+                  }
+            }
+            )
+
+      } else {
+        // Se muestra un mensaje de error si no se han rellenado todos los campos
+        this.messageError = 'Formulario no completo'
+      }
+    }
+  }
+}
+&lt;/script></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BuyConfirmation.html">BuyConfirmation</a></li><li><a href="module-CarouselIndicators.html">CarouselIndicators</a></li><li><a href="module-CarouselItem.html">CarouselItem</a></li><li><a href="module-Cartelera.html">Cartelera</a></li><li><a href="module-CarteleraDetails.html">CarteleraDetails</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-Functions_PassOperations.html">Functions_PassOperations</a></li><li><a href="module-Functions_Validations.html">Functions_Validations</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Index.html">Index</a></li><li><a href="module-LRUser.html">LRUser</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MenuOverlay.html">MenuOverlay</a></li><li><a href="module-MovieDetails.html">MovieDetails</a></li><li><a href="module-Profile.html">Profile</a></li><li><a href="module-TodayCarousel.html">TodayCarousel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 20 2023 20:02:56 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

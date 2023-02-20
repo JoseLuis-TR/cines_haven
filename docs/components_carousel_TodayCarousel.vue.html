@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/carousel/TodayCarousel.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/carousel/TodayCarousel.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;article class="loadingScreen" v-if="isLoading">
+  &lt;LoadingScreen
+      mensaje-carga="Cargando cartelera de hoy..">&lt;/LoadingScreen>
+  &lt;/article>
+  &lt;Transition v-else name="todayCartelera">
+    &lt;article>
+      &lt;section
+          class="carousel">
+        &lt;carousel-item
+            v-for="(movie, index) in this.moviesToday"
+            :today-movie="movie"
+            :key="`movie-${index}`"
+            :current-movie="currentMovie"
+            :index="index"
+            @mouseenter="this.stopMovieInterval"
+            @mouseleave="this.startMovieInterval">&lt;/carousel-item>
+      &lt;/section>
+      &lt;carousel-indicators
+          :total="moviesToday.length"
+          :current-index="currentMovie"
+          @change-movie="changeMovie($event)">
+      &lt;/carousel-indicators>
+    &lt;/article>
+  &lt;/Transition>
+&lt;/template>
+
+&lt;script>
+import CarouselItem from "./CarouselItem.vue";
+import CarouselIndicators from "./CarouselIndicators.vue";
+import LoadingScreen from "../LoadingScreen.vue";
+/**
+ * @file TodayCarousel.vue - Carousel de peliculas que se estan proyectando hoy
+ * @author José Luis Tocino Rojo
+ * @see &lt;a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github&lt;/a>
+ */
+
+/**
+ * @property {Object} name - Nombre del componente
+ * @property {Object} components - Componentes que se utilizan en el carousel
+ * @property {Object} components.LoadingScreen - Componente pantalla de carga
+ * @property {Object} components.CarouselIndicators - Componente indicadores del carousel
+ * @property {Object} components.CarouselItem - Componente item del carousel
+ * @vue-data {Array} moviesToday - Array de peliculas que se estan proyectando hoy
+ * @vue-data {number} [currentMovie = 0] - Indice de la pelicula que se esta mostrando
+ * @vue-data {number} [movieInterval = null] - Intervalo de tiempo para cambiar de pelicula
+ * @vue-data {boolean} [isLoading = false] - Indica si se esta cargando la cartelera de hoy
+ */
+export default {
+  name: "TodCarousel",
+  components: {LoadingScreen, CarouselIndicators, CarouselItem},
+  data(){
+    return{
+      moviesToday : [],
+      currentMovie : 0,
+      movieInterval: null,
+      isLoading: false
+    }
+  },
+  methods:{
+    /**
+     * Función que obtiene las peliculas que se estan proyectando hoy
+     * @returns {Promise&lt;void>} - Promesa que se resuelve cuando se obtienen las peliculas
+     */
+    async getTodaySessions() {
+      // Llamada a la API para obtener las peliculas que se estan proyectando hoy
+      return await fetch('https://backcines-haven.onrender.com/havenv1/sessions/today')
+          .then(response => response.json())
+          .then(data => {
+            // Se asigna el array de peliculas a la variable moviesToday
+            this.moviesToday = data
+            this.isLoading = false
+          })
+    },
+    /**
+     * Función que cambia la pelicula que se esta mostrando
+     * @param {number} index - Indice de la pelicula que se quiere mostrar
+     */
+    setCurrentMovie(index){
+      this.currentMovie = index;
+    },
+    /**
+     * Función que inicia el intervalo de tiempo para cambiar de pelicula
+     */
+    startMovieInterval(){
+      this.movieInterval = setInterval(() => {
+        const index = this.currentMovie &lt; this.moviesToday.length - 1 ? this.currentMovie + 1 : 0;
+        this.setCurrentMovie(index);
+      }, 5000)
+    },
+    /**
+     * Función que para el intervalo de tiempo para cambiar de pelicula
+     */
+    stopMovieInterval(){
+      clearInterval(this.movieInterval)
+    },
+    /**
+     * Función que cambia la pelicula que se esta mostrando
+     * @param {number} index - Indice de la pelicula que se quiere mostrar
+     */
+    changeMovie(index){
+      this.stopMovieInterval()
+      this.currentMovie = index
+      this.startMovieInterval()
+    }
+  },
+  // Cuando se monta el componente se obtienen las peliculas que se estan proyectando hoy
+  // y se inicia el intervalo de tiempo para cambiar de pelicula
+  async mounted() {
+    this.isLoading = true
+    await this.getTodaySessions()
+    this.startMovieInterval()
+  }
+}
+&lt;/script></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BuyConfirmation.html">BuyConfirmation</a></li><li><a href="module-CarouselIndicators.html">CarouselIndicators</a></li><li><a href="module-CarouselItem.html">CarouselItem</a></li><li><a href="module-Cartelera.html">Cartelera</a></li><li><a href="module-CarteleraDetails.html">CarteleraDetails</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-Functions_PassOperations.html">Functions_PassOperations</a></li><li><a href="module-Functions_Validations.html">Functions_Validations</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Index.html">Index</a></li><li><a href="module-LRUser.html">LRUser</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MenuOverlay.html">MenuOverlay</a></li><li><a href="module-MovieDetails.html">MovieDetails</a></li><li><a href="module-Profile.html">Profile</a></li><li><a href="module-TodayCarousel.html">TodayCarousel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 20 2023 20:02:56 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

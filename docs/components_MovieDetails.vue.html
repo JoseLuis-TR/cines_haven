@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/MovieDetails.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/MovieDetails.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+  &lt;Header>&lt;/Header>
+  &lt;main class="mainDetails" v-if="movieDetails.length > 0">
+    &lt;div class="containerBG">
+      &lt;img 
+        class="containerBG__image"
+         :src="movieDetails[0].screenshot"
+        alt="Captura de pantalla de pelicula">
+    &lt;/div>
+    &lt;article class="containerInfo">
+      &lt;img 
+        class="containerInfo__poster"
+         :src="movieDetails[0].poster_image"
+        alt="Poster de pelicula">
+      &lt;p class="containerInfo__titulo">{{movieDetails[0].title}}&lt;/p>
+      &lt;p class="containerInfo__director">Dirigida por: &lt;b>{{movieDetails[0].director}}&lt;/b>&lt;/p>
+      &lt;p class="containerInfo__minutos">{{movieDetails[0].time}}utos&lt;/p>
+    &lt;/article>
+    &lt;article class="containerData">
+      &lt;p class="containerData__title">Sinopsis&lt;/p>
+      &lt;span class="containerData__underline">&lt;/span>
+      &lt;p class="containerData__sinopsis">
+        {{movieDetails[0].synopsis}}
+      &lt;/p>
+    &lt;/article>
+    &lt;article class="containerData">
+      &lt;p class="containerData__title">Trailer&lt;/p>
+      &lt;span class="containerData__underline">&lt;/span>
+      &lt;iframe class="containerData__trailer" :src="`https://www.youtube.com/embed/` + movieDetails[0].trailer" allowfullscreen>&lt;/iframe>
+    &lt;/article>
+    &lt;article class="containerData">
+      &lt;p class="containerData__title">Sesiones&lt;/p>
+      &lt;span class="containerData__underline">&lt;/span>
+      &lt;CarteleraDetails
+        :sessions="this.movieDetails[0].sessions">
+      &lt;/CarteleraDetails>
+    &lt;/article>
+  &lt;/main>
+  &lt;Footer>&lt;/Footer>
+&lt;/template>
+
+&lt;script>
+import Header from "./Header.vue";
+import Footer from "./Footer.vue";
+import CarteleraDetails from "./CarteleraDetails.vue";
+/**
+ * @file MovieDetails.vue - Componente que muestra los detalles de una pelicula
+ * @author José Luis Tocino Rojo
+ * @see &lt;a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github&lt;/a>
+ */
+/**
+ * @property {string} name - Nombre del componente
+ * @property {object} components - Componentes que se renderizan en el componente
+ * @property {Object} components.Header - Componente header de la aplicación
+ * @property {Object} components.Footer - Componente footer de la aplicación
+ * @property {Object} components.CarteleraDetails - Componente que muestra las sesiones de una pelicula en los siguientes dias
+ * @vue-data {Array} movieDetails - Array que contiene los detalles de la pelicula
+ * @vue-data {boolean} [isLoading = false] - Indica si se está cargando la información de la pelicula
+*/
+export default {
+  name: "movieDetails",
+  components: { Footer, Header, CarteleraDetails },
+  data(){
+    return{
+      movieDetails: [],
+      isLoading: false
+    }
+  },
+  methods:{
+    /**
+     * Obtiene los detalles de una pelicula
+     * @param {string} movieID - ID de la pelicula
+     * @returns {Promise} - Promise que devuelve los detalles de la pelicula
+     */
+    async getMovieDetails(movieID){
+      this.isLoading = true
+      return await fetch(`https://backcines-haven.onrender.com/havenV1/movies/${movieID}`)
+          .then(response => response.json())
+          .then(data => {
+            this.movieDetails = data
+            this.isLoading = false
+          })
+    }
+  },
+  /**
+   * Obtiene los detalles de la pelicula al cargar el componente y cambia el titulo de la pagina
+   */
+  async mounted(){
+    await this.getMovieDetails(this.$route.params.id);
+    document.title = `Cines Haven - ${this.movieDetails[0].title}`
+  }
+}
+&lt;/script></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BuyConfirmation.html">BuyConfirmation</a></li><li><a href="module-CarouselIndicators.html">CarouselIndicators</a></li><li><a href="module-CarouselItem.html">CarouselItem</a></li><li><a href="module-Cartelera.html">Cartelera</a></li><li><a href="module-CarteleraDetails.html">CarteleraDetails</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-Functions_PassOperations.html">Functions_PassOperations</a></li><li><a href="module-Functions_Validations.html">Functions_Validations</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Index.html">Index</a></li><li><a href="module-LRUser.html">LRUser</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MenuOverlay.html">MenuOverlay</a></li><li><a href="module-MovieDetails.html">MovieDetails</a></li><li><a href="module-Profile.html">Profile</a></li><li><a href="module-TodayCarousel.html">TodayCarousel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 20 2023 20:02:56 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

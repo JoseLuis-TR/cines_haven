@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/CarteleraDetails.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/CarteleraDetails.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+    &lt;article class="loadingScreen" v-if="isLoading">
+        &lt;LoadingScreen
+            mensaje-carga="Cargando cartelera de los próximos días..">&lt;/LoadingScreen>
+    &lt;/article>
+    &lt;section v-else class="sliderSinceToday sliderDetails">
+        &lt;button
+            class="sliderSinceToday__sliderButton"
+            @click="showPreviousDates">
+            &lt;img src="../assets/icons/left.svg" alt="Atras">
+        &lt;/button>
+        &lt;section
+            class="sliderSinceToday__item"
+            v-for="date in visibleDates"
+            :key="date"
+            @click="toggleClass(date)"
+            v-bind:class="{'selected': date === selectedDate}"
+            >
+            {{date.formattedDate}}
+        &lt;/section>
+        &lt;button
+            class="sliderSinceToday__sliderButton"
+            @click="showNextDates">
+            &lt;img src="../assets/icons/right.svg" alt="Siguiente">
+        &lt;/button>
+    &lt;/section>
+    &lt;section class="carteleraUnica">
+        &lt;section class="carteleraUnica__hours">
+            &lt;p @click="handleBuy" class="carteleraUnica__hours--item" v-for="hour in hoursList" >{{hour}}&lt;/p>
+        &lt;/section>
+    &lt;/section>
+    &lt;buy-confirmation
+        :confirm-buy="showConfirmation"
+        @close-confirmation="handleConfirmation">
+    &lt;/buy-confirmation>
+&lt;/template>
+&lt;script>
+    import LoadingScreen from "./LoadingScreen.vue";
+    import BuyConfirmation from "./BuyConfirmation.vue";
+    /**
+     * @file CarteleraDetails.vue - Componente que contiene la cartelera de una película
+     * @author José Luis Tocino Rojo
+     * @see &lt;a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github&lt;/a>
+     */
+
+    /**
+     * @property {string} name - Nombre del componente
+     * @property {Object} components - Componentes que se utilizan en el componente
+     * @property {Object} components.LoadingScreen - Componente pantalla de carga
+     * @property {Object} components.BuyConfirmation - Componente confirmación de compra
+     * @vue-prop {Object} sessions - Sesiones de la película
+     * @vue-data {Array} dates - Fechas de las sesiones
+     * @vue-data {Array} movieSessions - Sesiones de la película
+     * @vue-data {Array} visibleDates - Fechas visibles en el slider
+     * @vue-data {number} [index = 0] - Índice de la fecha seleccionada
+     * @vue-data {string} selectedDate - Fecha seleccionada
+     * @vue-data {Array} hoursList - Lista de horas de la fecha seleccionada
+     * @vue-data {boolean} [isLoading = false] - Indica si se está cargando la cartelera
+     * @vue-data {boolean} [showConfirmation = false] - Indica si se muestra la confirmación de compra
+     */
+    export default {
+        name: "CarteleraDetails",
+        components: {BuyConfirmation, LoadingScreen},
+        props: ["sessions"],
+        data(){
+            return{
+                dates : [],
+                movieSessions : this.sessions,
+                visibleDates: [],
+                index: 0,
+                selectedDate: "",
+                hoursList: [],
+                isLoading: false,
+                showConfirmation: false
+            }
+        },
+        // Cuando se actualiza la fecha seleccionada se actualiza la lista de horas de ese dia
+        watch:{
+            selectedDate: function (val) {
+                this.showHours(val)
+            }
+        },
+        methods:{
+            /**
+             * Muestra la confirmación de compra
+             */
+            handleBuy(){
+                this.showConfirmation = true
+            },
+            /**
+             * Oculta la confirmación de compra
+             */
+            handleConfirmation(){
+                this.showConfirmation = false
+            },
+            /**
+             * Ordena las fechas de las sesiones
+             */
+            sortDates(){
+                let uniqueDates = new Set();
+
+                // Se recogen todas las fechas de las sesiones de manera única
+                this.sessions.forEach(session => {
+                    uniqueDates.add(session["date"])
+                })
+
+                // Se convierte el set en un array y se ordena
+                this.dates = Array.from(uniqueDates)
+
+                // Se ordenan las fechas
+                this.dates.sort(function (a, b) {
+                    return new Date(a) - new Date(b)
+                })
+            },
+            /**
+             * Actualiza las fechas visibles en el slider
+             */
+            updateVisibleDates(){
+                this.visibleDates = []
+                // Como máximo se muestran 4 fechas en el slider
+                const wantedDates = this.dates.slice(this.index, this.index + 4)
+                // Recorremos las fechas y las formateamos
+                wantedDates.forEach(date => {
+                    let dateString ;
+                    let dateParts = date.split("/")
+                    let formattedDate = new Date(dateParts[2], dateParts[1]-1, dateParts[0])
+                    let today = new Date();
+                    let tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
+
+                    // Se formatea la fecha con hoy, mañana o el día de la semana correspondiente
+                    if(formattedDate.toDateString() === today.toDateString()){
+                        dateString = "Hoy"
+                    } else if(formattedDate.toDateString() === tomorrow.toDateString()){
+                        dateString = "Mañana"
+                    } else {
+                        const options = {day: "numeric", month: "2-digit", weekday: "long"};
+                        dateString = formattedDate.toLocaleDateString("es-ES",options).replace(",","");
+                    }
+
+                    // Se añade la fecha al array de fechas visibles
+                    this.visibleDates.push({date:date, formattedDate: dateString})
+                })
+            },
+            /**
+             * Muestra las horas de la fecha seleccionada
+             * @param {string} date - Fecha seleccionada
+             */
+            showHours(date){
+                this.hoursList = []
+                this.movieSessions.forEach(session => {
+                    if(session.date === date.date){
+                        session.time.forEach(time => {
+                            this.hoursList.push(time)
+                        })
+                    }
+                })
+            },
+            /**
+             * Muestra las siguientes 3 fechas
+             */
+            showNextDates(){
+                  if(this.index &lt; this.dates.length - 3){
+                      this.index++;
+                      this.visibleDates = this.dates.slice(this.index, this.index + 3);
+                  }
+              },
+            /**
+             * Muestra las 3 fechas anteriores
+             */
+            showPreviousDates(){
+                  if(this.index > 0){
+                      this.index--;
+                      this.visibleDates = this.dates.slice(this.index, this.index + 3);
+                  }
+              },
+            /**
+             * Cambia la clase de la fecha seleccionada y actualiza la lista de horas
+             * @param date
+             */
+              toggleClass(date){
+                  this.selectedDate = date;
+              }
+        },
+        // Al montar el componente se ordenan las fechas y se actualizan las fechas visibles
+        mounted(){
+            this.sortDates();
+            this.updateVisibleDates();
+            this.selectedDate = this.visibleDates[0];
+        }
+    }
+&lt;/script></code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BuyConfirmation.html">BuyConfirmation</a></li><li><a href="module-CarouselIndicators.html">CarouselIndicators</a></li><li><a href="module-CarouselItem.html">CarouselItem</a></li><li><a href="module-Cartelera.html">Cartelera</a></li><li><a href="module-CarteleraDetails.html">CarteleraDetails</a></li><li><a href="module-Footer.html">Footer</a></li><li><a href="module-Functions_PassOperations.html">Functions_PassOperations</a></li><li><a href="module-Functions_Validations.html">Functions_Validations</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Index.html">Index</a></li><li><a href="module-LRUser.html">LRUser</a></li><li><a href="module-LoadingScreen.html">LoadingScreen</a></li><li><a href="module-MenuOverlay.html">MenuOverlay</a></li><li><a href="module-MovieDetails.html">MovieDetails</a></li><li><a href="module-Profile.html">Profile</a></li><li><a href="module-TodayCarousel.html">TodayCarousel</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 20 2023 20:02:56 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

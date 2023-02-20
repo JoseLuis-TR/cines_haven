@@ -1,4 +1,14 @@
 /**
+ * @file formValidations.js - Funciones para validar los formularios
+ * @author José Luis Tocino Rojo
+ * @see <a href="https://github.com/JoseLuis-TR/cines_haven" target="_blank">Github</a>
+ */
+
+/**
+ * @module Functions_Validations
+ */
+
+/**
  * Función que valida el email usando una expresión regular
  *
  * @memberof module:Functions_Validations
