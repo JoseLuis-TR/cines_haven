@@ -5,10 +5,11 @@
         <nav class="menuContainer__overlay">
           <header v-if="isUserLogged()" @click="openProfile" class="menuContainer__overlay__header">
             <img class="menuContainer__overlay__header--fondo" src="src/assets/images/spacejam.jpg" alt="Fondo Web">
+            <img class="menuContainer__overlay__header--fotoPerfil" :src="getProfilePic()" alt="Fondo Web">
             <p class="menuContainer__overlay__header--texto">{{getNick()}}</p>
           </header>
           <header v-else class="menuContainer__overlay__header" @click="handleUser">
-            <img class="menuContainer__overlay__header--profilePicture" src="src/assets/images/spacejam.jpg" alt="Fondo Web">
+            <img class="menuContainer__overlay__header--fondo" src="src/assets/images/spacejam.jpg" alt="Fondo Web">
             <p class="menuContainer__overlay__header--texto">Inicie sesión<br>o<br>Registrese</p>
           </header>
           <router-link to="/" class="menuContainer__overlay__enlace">
@@ -31,7 +32,7 @@
 <script>
 export default {
   name: "MenuOverlay",
-  emits: ['close-menu'],
+  emits: ['userForm', 'openProfile', 'close-menu'],
   props: {
     isOpened: {
     type: Boolean,
@@ -46,11 +47,19 @@ export default {
       this.$emit('openProfile')
     },
     isUserLogged(){
-      console.log(localStorage.getItem('user'))
       return localStorage.getItem('user') !== null
     },
     getNick(){
       return JSON.parse(localStorage.getItem('user')).nick
+    },
+    getProfilePic(){
+      const userPic = JSON.parse(localStorage.getItem('user'))
+      console.log(userPic.profilePicture)
+      if (userPic.profilePicture !== "") {
+        return `https://backcines-haven.onrender.com/${userPic.profilePicture}`
+      } else {
+        return `src/assets/images/default.svg`
+      }
     },
     logOut(){
       localStorage.removeItem('user')

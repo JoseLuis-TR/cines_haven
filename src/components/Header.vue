@@ -38,7 +38,6 @@ export default {
   methods: {
     handleMenu(){
       this.showMenu = !this.showMenu
-      console.log(JSON.parse(localStorage.getItem('user')))
     },
     openUserForm(){
       this.showMenu = !this.showMenu

@@ -2,9 +2,6 @@
 
 export default {
   name: 'App',
-  beforeMount() {
-    fetch("http://localhost:3001/havenV1/")
-  }
 }
 </script>
 

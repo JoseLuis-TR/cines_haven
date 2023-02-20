@@ -1,0 +1,24 @@
+@use "../utilities/variables" as v
+
+.menuContainer__confirmation
+  width: fit-content
+  height: fit-content
+  background-color: v.$form-color_medium
+  position: absolute
+  display: flex
+  flex-direction: column
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  padding: 50px 50px
+  border-radius: 60px
+  box-shadow: -20px 20px v.$detail-color
+  transition: all 0.3s ease-in
+  p
+    font-family: v.$mulish-font
+    font-size: 4rem
+    text-align: center
+    margin: 0
+    padding: 0
+    font-weight: 700
+    color: white

@@ -3,6 +3,7 @@
 .sliderSinceToday
   width: 100%
   max-width: 1000px
+  min-width: 375px
   height: 50px
   background-color: v.$form-color_medium
   font-family: v.$mulish-font
@@ -148,3 +149,31 @@
 
     &__times:hover
       background-color: black
+
+
+@media only screen and (max-width: 890px)
+  .infoMovies
+    &__item
+      &__data
+        display: grid
+        grid-template-columns: 1fr
+        grid-template-rows: 1fr
+        grid-template-areas: "Poster"
+        min-width: 125px
+        &--poster
+          grid-area: Poster
+
+        &--titulo
+          display: none
+
+        &--sala
+          display: none
+      
+      &__times
+        min-width: 250px
+        &--hour
+          font-size: 2rem
+
+  .sliderSinceToday
+    &__item
+      font-size: 1.5rem

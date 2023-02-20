@@ -30,7 +30,7 @@
             <section class="formContainer__body">
               <p class="formContainer__body--text">Únete para poder disfrutar de todas las opciones que ofrece Cines Haven</p>
               <form class="formContainer__body__form" v-on:submit.prevent="createNewUser(emailReg,nickReg,passReg,repPassReg)">
-                <label for="email">Email {{}}</label>
+                <label for="email">Email</label>
                 <input v-model="emailReg" v-on:blur="validateEmail" :class="{'input_error' : !regexEmailOk}" id="email" type="email">
                 <label for="username">Usuario</label>
                 <input v-model="nickReg" v-on:blur="validateUser" :class="{'input_error' : !regexUserOk}" id="username" type="text">
@@ -78,6 +78,7 @@ export default {
       default: false
     }
   },
+  emits: ['close-userForm'],
   data(){
     return {
       showForm: 'login',
@@ -100,19 +101,16 @@ export default {
     }
   },
   methods:{
-    async checkLogin(logEmail,logPass){
-      await fetch(`http://localhost:3001/havenV1/users/${logEmail}`)
+    async checkLogin(logUser,logPass){
+      await fetch(`https://backcines-haven.onrender.com/havenV1/users/${logUser}`)
           .then(response => response.json())
           .then(data => {
             if(data === false){
               this.messageError = "El usuario no existe"
-              console.log(this.logError)
-            } else if(compararPass(data[0].password, logPass)){
+            } else if(!compararPass(logPass,data[0].password)){
               this.messageError = "Contraseña incorrecta"
-              console.log(this.logError)
             } else {
               this.messageError = 'Login correcto'
-              console.log(data[0])
               localStorage.setItem('user', JSON.stringify(data[0]))
               if(this.$route.path === "/") this.$router.go()
               else this.$router.push("/");
@@ -124,7 +122,6 @@ export default {
     },
     validateUser() {
       this.regexUserOk = validateUserRegex(this.nickReg)
-      console.log(this.regexUserOk)
     },
     validatePass() {
       this.regexPassOk = validatePasswordRegex(this.passReg)
@@ -138,7 +135,7 @@ export default {
           return true
       return false
     },
-    async createNewUser(emailReg, userReg, passReg, repeatPassReg){
+    async createNewUser(emailReg, userReg, passReg){
       if(this.lastCheckReg()){
         this.messageError = ''
         const newUser = {
@@ -147,7 +144,7 @@ export default {
           "password" : encriptarPass(passReg)
         }
 
-        await fetch('http://localhost:3001/havenV1/users', {
+        await fetch('https://backcines-haven.onrender.com/havenV1/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -166,7 +163,6 @@ export default {
             )
 
       } else {
-        console.log("error")
         this.messageError = 'Formulario no completo'
       }
     }

@@ -2,14 +2,78 @@
 
 .formContainer
   &__body
+    display: flex
+    flex-direction: column
+    align-items: center
     &__imageHandler
       display: flex
       flex-direction: column
       align-items: center
+      border: none
       &--image
         width: 100px
         height: 100px
-        outline: solid 2px black
-        border-radius: 50%
-        background-color: grey
+        outline: solid 5px black
+        border-radius: 25%
+        background-color: white
       &--input
+        display: none
+
+      &--label
+        font-size: 2rem
+        font-weight: 700
+        color: white
+        width: fit-content
+        align-self: center
+        margin-top: 15px
+        border: none
+        border-radius: 5px
+        padding: 15px 20px
+        background-color: v.$form-color_darker
+        cursor: pointer
+        transition: all 0.7s
+
+      &--label:hover
+        transform: translateX(10px) translateY(-10px)
+        box-shadow: v.$detail-color -10px 10px
+
+    &__userDataHandler
+      display: flex
+      flex-direction: column
+      width: 100%
+      margin-top: 50px
+      border: none
+
+      label
+        font-size: 2rem
+        margin-bottom: 5px
+        color: white
+
+      input
+        height: 40px
+        padding: 0 10px
+        font-size: 1.5rem
+        font-weight: 600
+        border: none
+        border-radius: 5px
+        background-color: v.$input-color
+        margin: 0 0 20px
+
+      &--submit
+        justify-self: center
+        font-size: 2rem
+        font-weight: 700
+        color: white
+        width: fit-content
+        align-self: center
+        margin-top: 15px
+        border: none
+        border-radius: 5px
+        padding: 15px 20px
+        background-color: v.$form-color_darker
+        cursor: pointer
+        transition: all 0.7s
+
+      &--submit:hover
+        transform: translateX(10px) translateY(-10px)
+        box-shadow: v.$detail-color -10px 10px

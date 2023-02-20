@@ -46,7 +46,6 @@ export default {
           .then(response => response.json())
           .then(data => {
             this.moviesToday = data
-            console.log(this.moviesToday)
             this.isLoading = false
           })
     },

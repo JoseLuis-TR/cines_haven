@@ -39,18 +39,23 @@
         <p class="infoMovies__item__data--sala">{{session.roomName}}</p>
       </section>
       <section class="infoMovies__item__times">
-        <p class="infoMovies__item__times--hour" v-for="hour in session.time" >{{hour}}</p>
+        <p @click="handleBuy" class="infoMovies__item__times--hour" v-for="hour in session.time" >{{hour}}</p>
       </section>
     </section>
   </section>
+  <buy-confirmation
+      :confirm-buy="showConfirmation"
+      @close-confirmation="handleConfirmation">
+  </buy-confirmation>
 </template>
 
 <script>
 import LoadingScreen from "./LoadingScreen.vue";
+import BuyConfirmation from "./BuyConfirmation.vue";
 
 export default {
   name: "Cartelera",
-  components: {LoadingScreen},
+  components: {LoadingScreen, BuyConfirmation},
   data(){
     return{
       sinceToday : [],
@@ -59,7 +64,8 @@ export default {
       index: 0,
       selectedDate: "",
       moviesList: [],
-      isLoading: false
+      isLoading: false,
+      showConfirmation: false
     }
   },
   watch:{
@@ -68,6 +74,12 @@ export default {
     }
   },
   methods:{
+    handleBuy(){
+      this.showConfirmation = true
+    },
+    handleConfirmation(){
+      this.showConfirmation = false
+    },
     async getSinceTodaySessions(){
       return await fetch('https://backcines-haven.onrender.com/havenv1/sessions/sincetoday')
           .then(response => response.json())
@@ -108,9 +120,12 @@ export default {
         let dateString ;
         let dateParts = date.split("/")
         let formattedDate = new Date(dateParts[2], dateParts[1]-1, dateParts[0])
+        let today = new Date()
         let tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000));
 
-        if(formattedDate.toDateString() === tomorrow.toDateString()){
+        if(formattedDate.toDateString() === today.toDateString()){
+          dateString = "Hoy"
+        } else if(formattedDate.toDateString() === tomorrow.toDateString()){
           dateString = "Mañana"
         } else {
           const options = {day: "numeric", month: "2-digit", weekday: "long"};

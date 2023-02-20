@@ -4,12 +4,14 @@
     <div class="containerBG">
       <img 
         class="containerBG__image"
-         :src="movieDetails[0].screenshot">
+         :src="movieDetails[0].screenshot"
+        alt="Captura de pantalla de pelicula">
     </div>
     <article class="containerInfo">
       <img 
         class="containerInfo__poster"
-         :src="movieDetails[0].poster_image">
+         :src="movieDetails[0].poster_image"
+        alt="Poster de pelicula">
       <p class="containerInfo__titulo">{{movieDetails[0].title}}</p>
       <p class="containerInfo__director">Dirigida por: <b>{{movieDetails[0].director}}</b></p>
       <p class="containerInfo__minutos">{{movieDetails[0].time}}utos</p>
@@ -24,7 +26,7 @@
     <article class="containerData">
       <p class="containerData__title">Trailer</p>
       <span class="containerData__underline"></span>
-      <iframe class="containerData__trailer" :src="`http://www.youtube.com/embed/` + movieDetails[0].trailer" frameborder="0" allowfullscreen></iframe>
+      <iframe class="containerData__trailer" :src="`https://www.youtube.com/embed/` + movieDetails[0].trailer" allowfullscreen></iframe>
     </article>
     <article class="containerData">
       <p class="containerData__title">Sesiones</p>
@@ -54,19 +56,16 @@ export default {
   methods:{
     async getMovieDetails(movieID){
       this.isLoading = true
-      return await fetch(`http://localhost:3001/havenV1/movies/${movieID}`)
+      return await fetch(`https://backcines-haven.onrender.com/havenV1/movies/${movieID}`)
           .then(response => response.json())
           .then(data => {
             this.movieDetails = data
-            console.log(this.movieDetails)
             this.isLoading = false
-            console.log(this.movieDetails[0].trailer)
           })
     }
   },
   async mounted(){
     await this.getMovieDetails(this.$route.params.id);
-    console.log(this.movieDetails[0])
     document.title = `Cines Haven - ${this.movieDetails[0].title}`
   }
 }

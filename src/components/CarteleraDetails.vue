@@ -26,16 +26,21 @@
     </section>
     <section class="carteleraUnica">
         <section class="carteleraUnica__hours">
-            <p class="carteleraUnica__hours--item" v-for="hour in hoursList" >{{hour}}</p>
+            <p @click="handleBuy" class="carteleraUnica__hours--item" v-for="hour in hoursList" >{{hour}}</p>
         </section>
     </section>
+    <buy-confirmation
+        :confirm-buy="showConfirmation"
+        @close-confirmation="handleConfirmation">
+    </buy-confirmation>
 </template>
 <script>
     import LoadingScreen from "./LoadingScreen.vue";
+    import BuyConfirmation from "./BuyConfirmation.vue";
 
     export default {
         name: "CarteleraDetails",
-        components: {LoadingScreen},
+        components: {BuyConfirmation, LoadingScreen},
         props: ["sessions"],
         data(){
             return{
@@ -45,7 +50,8 @@
                 index: 0,
                 selectedDate: "",
                 hoursList: [],
-                isLoading: false
+                isLoading: false,
+                showConfirmation: false
             }
         },
         watch:{
@@ -54,6 +60,12 @@
             }
         },
         methods:{
+            handleBuy(){
+                this.showConfirmation = true
+            },
+            handleConfirmation(){
+                this.showConfirmation = false
+            },
             sortDates(){
                 let uniqueDates = new Set();
 
@@ -92,14 +104,12 @@
             showHours(date){
                 this.hoursList = []
                 this.movieSessions.forEach(session => {
-                    console.log(date)
                     if(session.date === date.date){
                         session.time.forEach(time => {
                             this.hoursList.push(time)
                         })
                     }
                 })
-                console.log(this.hoursList)
             },
             showNextDates(){
                 if(this.index < this.dates.length - 3){
