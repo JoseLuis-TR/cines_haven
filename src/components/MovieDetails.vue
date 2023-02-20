@@ -5,6 +5,7 @@
       <img 
         class="containerBG__image"
          :src="movieDetails[0].screenshot"
+        crossorigin="anonymous"
         alt="Captura de pantalla de pelicula">
     </div>
     <article class="containerInfo">
