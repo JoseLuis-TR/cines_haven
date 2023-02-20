@@ -7,7 +7,7 @@
     <button
         class="sliderSinceToday__sliderButton"
         @click="showPreviousDates">
-      <img src="src/assets/icons/left.svg" alt="Atras">
+      <img src="../assets/icons/left.svg" alt="Atras">
     </button>
     <section
         class="sliderSinceToday__item"
@@ -21,7 +21,7 @@
     <button
         class="sliderSinceToday__sliderButton"
         @click="showNextDates">
-      <img src="src/assets/icons/right.svg" alt="Siguiente">
+      <img src="../assets/icons/right.svg" alt="Siguiente">
     </button>
   </section>
   <section  class="infoMovies">

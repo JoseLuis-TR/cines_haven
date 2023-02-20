@@ -1,8 +1,8 @@
 <template>
   <header class="header">
-    <RouterLink to="/" class="header__logocontainer" ><img class="header__logocontainer--logo" src="src/assets/images/logoHaven.png" alt="Logo Cines Heaven"></RouterLink>
+    <RouterLink to="/" class="header__logocontainer" ><img class="header__logocontainer--logo" src="../assets/images/logoHaven.png" alt="Logo Cines Heaven"></RouterLink>
     <div class="header__spacer"></div>
-    <img class="header__icon" src="src/assets/icons/menu.svg" alt="Menu" @click="handleMenu">
+    <img class="header__icon" src="../assets/icons/menu.svg" alt="Menu" @click="handleMenu">
   </header>
   <menu-overlay
       :is-opened="showMenu"
